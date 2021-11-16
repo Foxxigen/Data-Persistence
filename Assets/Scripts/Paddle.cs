@@ -8,9 +8,13 @@ public class Paddle : MonoBehaviour
     public float MaxMovement = 2.0f;
     
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
-        
+        GameManager.Settings currentSettings = GameManager.Instance.LoadSettings();
+        if (currentSettings != null)
+		{
+            Speed = currentSettings.paddleSpeed;
+        }
     }
 
     // Update is called once per frame

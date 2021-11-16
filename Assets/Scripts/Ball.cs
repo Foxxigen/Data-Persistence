@@ -7,6 +7,17 @@ public class Ball : MonoBehaviour
 {
     private Rigidbody m_Rigidbody;
 
+    public float MaxSpeed = 5f;
+
+    void Awake()
+    {
+        GameManager.Settings currentSettings = GameManager.Instance.LoadSettings();
+        if (currentSettings != null)
+        {
+            MaxSpeed = currentSettings.ballSpeed;
+        }
+    }
+
     void Start()
     {
         m_Rigidbody = GetComponent<Rigidbody>();
@@ -17,7 +28,7 @@ public class Ball : MonoBehaviour
         var velocity = m_Rigidbody.velocity;
         
         //after a collision we accelerate a bit
-        velocity += velocity.normalized * 0.01f;
+        velocity += velocity.normalized;
         
         //check if we are not going totally vertically as this would lead to being stuck, we add a little vertical force
         if (Vector3.Dot(velocity.normalized, Vector3.up) < 0.1f)
@@ -26,9 +37,9 @@ public class Ball : MonoBehaviour
         }
 
         //max velocity
-        if (velocity.magnitude > 3.0f)
+        if (velocity.magnitude > MaxSpeed)
         {
-            velocity = velocity.normalized * 3.0f;
+            velocity = velocity.normalized * MaxSpeed;
         }
 
         m_Rigidbody.velocity = velocity;
